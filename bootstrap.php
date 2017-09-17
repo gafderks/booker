@@ -20,3 +20,25 @@ $conn = [
 // obtaining the entity manager
 global $entityManager;
 $entityManager = EntityManager::create($conn, $config);
+
+// setup email
+$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+try {
+    $mail->IsSMTP(); // Use SMTP
+    $mail->Host        = "smtp.gmail.com"; // Sets SMTP server
+    $mail->SMTPDebug   = 2; // 2 to enable SMTP debug information
+    $mail->SMTPAuth    = TRUE; // enable SMTP authentication
+    $mail->SMTPSecure  = "tls"; //Secure conection
+    $mail->Port        = 587; // set the SMTP port
+    $mail->Username    = 'pm.pivo.sld@gmail.com'; // SMTP account username
+    $mail->Password    = getenv('SMTP_PASS'); // SMTP account password
+    $mail->Priority    = 1; // Highest priority - Email priority (1 = High, 3 = Normal, 5 = low)
+    $mail->Encoding    = '8bit';
+    $mail->ContentType = 'text/html; charset=utf-8\r\n';
+    $mail->From        = 'pm.pivo.sld@gmail.com';
+    $mail->FromName    = 'Pivo\'s';
+    $mail->WordWrap = 50; // set word wrap to 50 characters
+    $mail->IsHTML(false);
+} catch (Exception $e) {
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+}

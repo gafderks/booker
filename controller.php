@@ -17,7 +17,7 @@ if (isset($_POST['action'])) {
 }
 
 function subscribe($time, array $names, $speltak, $email) {
-    global $entityManager, $config, $notice;
+    global $entityManager, $config, $notice, $mail;
     
     // Check if there are not too many already
     if (subscriptionCount($time) + count($names) <= $config['maxGroupSize']) {
@@ -26,15 +26,22 @@ function subscribe($time, array $names, $speltak, $email) {
         $entityManager->persist($subscription);
         $entityManager->flush();
     
-        mail($_POST['email'], 'Inschrijving spooktocht pivo\'s',
-            "Je hebt een inschrijving gedaan voor de spooktocht van de pivo's met de volgende informatie:"
+        $mail->addAddress($email);
+        $mail->addReplyTo('pivos@descouting.nl');
+        $mail->Subject = 'Inschrijving spooktocht pivo\'s';
+        $mail->Body = "Je hebt een inschrijving gedaan voor de spooktocht van de pivo's met de volgende informatie:"
             ."\nDeelnemers: ".join(', ', $names)
             ."\nSpeltak: $speltak"
             ."\nTijdstip: ".$config['date']." om $time"
             ."\n\nOm je inschrijving aan te passen of je uit te schrijven ga je naar:"
             ."\n".$_SERVER['HTTP_HOST']."/modify.php?pass=$subscription->getPass()"
-            ."\n\n\nAls je vragen hebt over je inschrijving kun je mailen naar pivos@descouting.nl",
-            'Reply-To: pivos@descouting.nl');
+            ."\n\n\nAls je vragen hebt over je inschrijving kun je mailen naar pivos@descouting.nl";
+        
+        try {
+            $mail->send();
+        } catch (Exception $e) {
+            echo 'Mailer Error: '.$mail->ErrorInfo;
+        }
         
         $notice['text'] = "Je hebt succesvol ".count($names)." personen aangemeld voor de spooktocht om $time. <br/>Op je emailadres heb je een bevestiging ontvangen.";
         $notice['type'] = 'success';
