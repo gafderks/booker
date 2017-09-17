@@ -26,7 +26,6 @@ $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 try {
     $mail->isSMTP(); // Use SMTP
     $mail->Host        = 'smtp.gmail.com'; // Sets SMTP server
-    $mail->SMTPDebug   = 2; // 2 to enable SMTP debug information
     $mail->SMTPAuth    = true; // enable SMTP authentication
     $mail->SMTPSecure  = "tls"; //Secure conection
     $mail->Port        = 587; // set the SMTP port
