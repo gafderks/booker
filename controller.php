@@ -33,7 +33,7 @@ function subscribe($time, array $names, $speltak, $email) {
             ."\nSpeltak: $speltak"
             ."\nTijdstip: ".$config['date']." om $time"
             ."\n\nOm je inschrijving aan te passen of je uit te schrijven ga je naar:"
-            ."\n".$_SERVER['HTTP_HOST']."/modify.php?pass=".$subscription->getPass()
+            ."\nhttps://".$_SERVER['HTTP_HOST']."/modify.php?pass=".$subscription->getPass()
             ."\n\n\nAls je vragen hebt over je inschrijving kun je mailen naar pivos@descouting.nl";
         
         try {
