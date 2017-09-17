@@ -27,7 +27,6 @@ function subscribe($time, array $names, $speltak, $email) {
         $entityManager->flush();
     
         $mail->addAddress($email);
-        $mail->addReplyTo('pivos@descouting.nl');
         $mail->Subject = 'Inschrijving spooktocht pivo\'s';
         $mail->Body = "Je hebt een inschrijving gedaan voor de spooktocht van de pivo's met de volgende informatie:"
             ."\nDeelnemers: ".join(', ', $names)
