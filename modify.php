@@ -109,16 +109,7 @@ if (count($subscription) == 0) {
         </div>
     </div>
     
-    
-    
-    
-    
 </div>
-
-
-
-
-
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

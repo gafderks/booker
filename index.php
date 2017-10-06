@@ -26,8 +26,9 @@ include_once('controller.php');
     </div>
   <?php endif; ?>
   
-  <p>Op zaterdag 18 november organiseren de pivo's een spooktocht voor alle leden van Scouting Laurentius en hun
-    broertjes, zusjes, vrienden en vriendinnen.</p>
+  <p>Op zaterdag 18 november organiseren de pivo's een spooktocht voor alle leden van Scouting Laurentius en hun ouders,
+    broertjes, zusjes, vrienden en vriendinnen. De spooktocht heeft twee niveaus voor de onderbouw en de bovenbouw.
+    Deelname kost &euro;2 met een drankje na afloop inbegrepen.</p>
 
   <h2>Onderbouw spooktocht</h2>
   <div id="accordion-ob" role="tablist">
