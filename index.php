@@ -39,8 +39,11 @@ include_once('controller.php');
         <h5 class="mb-0">
           <a data-toggle="collapse" href="#collapse-ob-<?= $key ?>" aria-expanded="true" aria-controls="collapse-ob-<?= $key ?>">
             <?= $time ?> uur
-            <?php if ($available > 0): ?>
+            <?php if ($available > 2): ?>
               <span class="badge badge-primary badge-success"><?= $available ?> plaatsen vrij</span>
+            <?php elseif ($available > 0): ?>
+              <span class="badge badge-primary badge-success"><?= $available ?> plaats<?= ($available > 1) ? "en" :
+                      "" ?> vrij</span>
             <?php else: ?>
               <span class="badge badge-primary badge-danger">vol</span>
             <?php endif; ?>
