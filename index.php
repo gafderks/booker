@@ -84,7 +84,8 @@ include_once('controller.php');
                 <div class="form-group">
                   <label for="name-ob-<?= $key ?>">Deelnemers</label>
                   <div class="participant-container">
-                    <input type="text" required class="form-control" name="name[]" id="name-ob-<?= $key ?>"
+                    <input type="text" required class="form-control" autocomplete="off" name="name[]" id="name-ob-<?=
+                    $key ?>"
                            placeholder="Naam deelnemer 1">
                   </div>
                   <button type="button" class="btn form-control btn-secondary add-participant">Deelnemer toevoegen (max
@@ -102,7 +103,7 @@ include_once('controller.php');
                 <div class="form-group">
                   <label for="email-ob-<?= $key ?>">E-mailadres inschrijver</label>
                   <input type="email" name="email" required class="form-control" id="email-ob-<?= $key ?>"
-                         aria-describedby="emailHelp-ob-<?= $key ?>"
+                         aria-describedby="emailHelp-ob-<?= $key ?>" autocomplete="off"
                          placeholder="E-mailadres invullen">
                   <small id="emailHelp-ob-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
                     gemaakt.</small>
@@ -181,7 +182,7 @@ include_once('controller.php');
                           <label for="name-bb-<?= $key ?>">Deelnemers</label>
                           <div class="participant-container">
                             <input type="text" required class="form-control" name="name[]" id="name-bb-<?= $key ?>"
-                                   placeholder="Naam deelnemer 1">
+                                   placeholder="Naam deelnemer 1" autocomplete="off">
                           </div>
                           <button type="button" class="btn form-control btn-secondary add-participant">Deelnemer toevoegen (max
                               <?= $available ?>)</button>
@@ -200,7 +201,7 @@ include_once('controller.php');
                           <label for="email-bb-<?= $key ?>">E-mailadres inschrijver</label>
                           <input type="email" name="email" required class="form-control" id="email-bb-<?= $key ?>"
                                  aria-describedby="emailHelp-bb-<?= $key ?>"
-                                 placeholder="E-mailadres invullen">
+                                 placeholder="E-mailadres invullen" autocomplete="off">
                           <small id="emailHelp-bb-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
                             gemaakt.</small>
                         </div>
@@ -242,7 +243,7 @@ include_once('controller.php');
 
     if (currentParticipants < maxParticipants) {
       var element = $($.parseHTML('<input type="text" class="form-control" name="name[]" placeholder="Naam deelnemer '+
-                                  (currentParticipants + 1)+'">'));
+                                  (currentParticipants + 1)+'" autocomplete="off">'));
       container.find(".participant-container").append(element);
     }
     if (currentParticipants + 1 === maxParticipants) {
