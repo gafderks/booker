@@ -14,6 +14,18 @@ include_once('controller.php');
         integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
   <title>Pivo's Spooktochten</title>
+  <style>
+    @media print {
+      .collapse {
+        display: block !important;
+        height: auto !important;
+      }
+      
+      .hidden-print {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
 <div class="container">
@@ -54,7 +66,7 @@ include_once('controller.php');
       <div id="collapse-ob-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-ob-<?= $key ?>"
            data-parent="#accordion-ob">
         <div class="card-body">
-          <h3>Huidige inschrijvingen</h3>
+          <h3 class="hidden-print">Huidige inschrijvingen</h3>
           <?php if ($available == $config['maxGroupSize']): ?>
             <p><em>Nog geen inschrijvingen</em></p>
           <?php else: ?>
@@ -68,13 +80,14 @@ include_once('controller.php');
           <?php endif; ?>
     
           <?php if ($available > 0): ?>
-          <p>
-            <a class="btn btn-primary" data-toggle="collapse" href="#subscribe-ob-<?= $key ?>" aria-expanded="false"
+          <p class="hidden-print">
+            <a class="btn btn-primary hidden-print" data-toggle="collapse" href="#subscribe-ob-<?= $key ?>"
+               aria-expanded="false"
                aria-controls="subscribe-ob-<?= $key ?>">
               Inschrijven
             </a>
           </p>
-          <div class="collapse" id="subscribe-ob-<?= $key ?>">
+          <div class="collapse hidden-print" id="subscribe-ob-<?= $key ?>">
             <div class="card card-body">
               <form class="hidden-print" method="post">
                 <h3>Inschrijfformulier</h3>
@@ -114,7 +127,7 @@ include_once('controller.php');
           </div>
           <?php else: ?>
           <p>
-            <button type="button" disabled class="btn btn-danger">Inschrijving is vol</button>
+            <button type="button" disabled class="btn btn-danger hidden-print">Inschrijving is vol</button>
           </p>
           <?php endif; ?>
 
@@ -151,7 +164,7 @@ include_once('controller.php');
           <div id="collapse-bb-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-bb-<?= $key ?>"
                data-parent="#accordion-bb">
             <div class="card-body">
-              <h3>Huidige inschrijvingen</h3>
+              <h3 class="hidden-print">Huidige inschrijvingen</h3>
                 <?php if ($available == $config['maxGroupSize']): ?>
                   <p><em>Nog geen inschrijvingen</em></p>
                 <?php else: ?>
@@ -165,13 +178,14 @@ include_once('controller.php');
                 <?php endif; ?>
                 
                 <?php if ($available > 0): ?>
-                  <p>
-                    <a class="btn btn-primary" data-toggle="collapse" href="#subscribe-bb-<?= $key ?>" aria-expanded="false"
+                  <p class="hidden-print">
+                    <a class="btn btn-primary hidden-print" data-toggle="collapse" href="#subscribe-bb-<?= $key ?>"
+                       aria-expanded="false"
                        aria-controls="subscribe-bb-<?= $key ?>">
                       Inschrijven
                     </a>
                   </p>
-                  <div class="collapse" id="subscribe-bb-<?= $key ?>">
+                  <div class="collapse hidden-print" id="subscribe-bb-<?= $key ?>">
                     <div class="card card-body">
                       <form class="hidden-print" method="post">
                         <h3>Inschrijfformulier</h3>
@@ -211,7 +225,7 @@ include_once('controller.php');
                   </div>
                 <?php else: ?>
                   <p>
-                    <button type="button" disabled class="btn btn-danger">Inschrijving is vol</button>
+                    <button type="button" disabled class="btn btn-danger hidden-print">Inschrijving is vol</button>
                   </p>
                 <?php endif; ?>
 
