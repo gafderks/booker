@@ -86,7 +86,7 @@ include_once('controller.php');
     </div>
   <?php endif; ?>
   
-  <p>Op zaterdag 6 januari organiseren de pivo's een spooktocht voor alle 16+-leden, ouders en
+  <p>Op zaterdag 6 januari organiseren de pivo's een PubQuiz voor alle 16+-leden, ouders en
     vrijwilligers
     van
     Scouting Laurentius.
