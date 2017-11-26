@@ -44,13 +44,18 @@ include_once('controller.php');
       background: #31302f;
       color: white;
       height: 100%;
+      background-image: url(2017.png);
+      background-repeat: no-repeat;
+      background-position: 98% 98%;
+      background-size: 390px;
+      background-attachment: fixed;
     }
     
     html {
       height: 100%;
     }
 
-    @media (min-width: 767px) {
+    @media (min-width: 768px) {
       body > .container {
         min-height: 100%;
         border-left: 50px solid transparent;
@@ -58,6 +63,12 @@ include_once('controller.php');
         border-image: url(border.png);
         border-image-slice: 155;
         border-image-width: 32px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        padding-bottom: 240px;
       }
     }
     
