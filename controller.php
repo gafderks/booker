@@ -32,8 +32,10 @@ function subscribe($teamId, array $names, $teamname, $email) {
     if (subscriptionCount($team) + count($names) <= $config['maxGroupSize']) {
         if (!empty($email) && count($names) > 0) {
     
-            $subscription = new Subscription($team, $names, $email);
+            $subscription = new Subscription($names, $email, $team);
+            $team->addSubscription($subscription);
             $entityManager->persist($subscription);
+            $entityManager->persist($team);
             $entityManager->flush();
     
             $mail->addAddress($email);

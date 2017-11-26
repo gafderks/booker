@@ -50,4 +50,8 @@ class Team
         $this->teamName = $teamName;
     }
     
+    public function addSubscription(\Subscription $subscription) {
+        $this->subscriptions->add($subscription);
+    }
+    
 }

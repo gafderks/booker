@@ -22,7 +22,7 @@ class Subscription
     protected $email;
     
     /**
-     * @ManyToOne(targetEntity="Team", inversedBy="subscriptions")
+     * @ManyToOne(targetEntity="Team", inversedBy="subscriptions", cascade={"persist"})
      * @JoinColumn(name="team_id", referencedColumnName="id")
      * @var \Team
      */
@@ -68,7 +68,7 @@ class Subscription
         return $this->team;
     }
     
-    public function __construct($team, $names, $email) {
+    public function __construct($names, $email, \Team $team) {
         $this->names = array_values(array_filter($names));
         $this->email = $email;
         $this->timestamp = new \DateTime('now');
