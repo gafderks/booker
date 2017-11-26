@@ -101,7 +101,8 @@ include_once('controller.php');
         <h5 class="mb-0">
           <a data-toggle="collapse" href="#collapse-<?= $key ?>" aria-expanded="true" aria-controls="collapse-<?= $key ?>">
             <?= $key+1 ?>. <?= $team->getTeamName() ?>
-            <small class="text-muted"><?= subscriptionCount($team) ?> deelnemer<?= (subscriptionCount($team) > 1) ? "s" : "" ?></small>
+            <small class="text-muted"><?= subscriptionCount($team) ?>&nbsp;deelnemer<?= (subscriptionCount($team) > 1) ?
+                    "s" : "" ?></small>
           </a>
         </h5>
       </div>
