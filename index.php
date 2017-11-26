@@ -49,14 +49,16 @@ include_once('controller.php');
     html {
       height: 100%;
     }
-    
-    body > .container {
-      min-height: 100%;
-      border-left: 50px solid transparent;
-      border-right: 50px solid transparent;
-      border-image: url(border.png);
-      border-image-slice: 155;
-      border-image-width: 32px;
+
+    @media (min-width: 767px) {
+      body > .container {
+        min-height: 100%;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-image: url(border.png);
+        border-image-slice: 155;
+        border-image-width: 32px;
+      }
     }
     
     h1 {
