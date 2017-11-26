@@ -13,7 +13,7 @@ include_once('controller.php');
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
         integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
-  <title>Pivo's Spooktochten</title>
+  <title>Pivo's PubQuiz</title>
   <style>
     @media print {
       .collapse {
@@ -26,11 +26,57 @@ include_once('controller.php');
       }
     }
   </style>
+  
+  <style>
+
+    @font-face {font-family:"Orange Juice";src:url("orange_juice.eot?") format("eot"),url("orange_juice.woff") format("woff"),url("orange_juice.ttf") format("truetype"),url("orange_juice.svg#orangejuice") format("svg");font-weight:normal;font-style:normal;}
+    /*@font-face {*/
+      /*font-family: 'Return-To-Sender';*/
+      /*src:  url('Return-To-Sender.ttf.woff') format('woff'),*/
+      /*url('Return-To-Sender.ttf.svg#Return-To-Sender') format('svg'),*/
+      /*url('Return-To-Sender.ttf.eot'),*/
+      /*url('Return-To-Sender.eot?#iefix') format('embedded-opentype');*/
+      /*font-weight: normal;*/
+      /*font-style: normal;*/
+    /*}*/
+
+    body {
+      background: #31302f;
+      color: white;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    body > .container {
+      min-height: 100%;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-image: url(border.png);
+      border-image-slice: 155;
+      border-image-width: 32px;
+    }
+    
+    h1 {
+      font-family: 'Orange Juice',apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      font-size: 60px;
+    }
+    
+    /*h2, h3 {*/
+      /*font-family: 'Return-To-Sender',apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;*/
+    /*}*/
+    
+    .card {
+      color: black;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
   
-  <h1>Pivo's spooktochten</h1>
+  <h1>Pivo's PubQuiz 2017</h1>
     
   <?php if (isset($notice)): ?>
     <div class="alert alert-<?= $notice['type'] ?>" role="alert">
@@ -38,40 +84,35 @@ include_once('controller.php');
     </div>
   <?php endif; ?>
   
-  <p>Op zaterdag 18 november organiseren de pivo's een spooktocht voor alle leden van Scouting Laurentius en hun ouders,
-    broertjes, zusjes, vrienden en vriendinnen. De spooktocht heeft twee niveaus voor de onderbouw en de bovenbouw.
-    Deelname kost &euro;2 met een drankje na afloop inbegrepen.</p>
+  <p>Op zaterdag 6 januari organiseren de pivo's een spooktocht voor alle 16+-leden, ouders en
+    vrijwilligers
+    van
+    Scouting Laurentius.
+    Deelname kost &euro;5 per team.</p>
 
-  <h2>Onderbouw spooktocht</h2>
-  <div id="accordion-ob" role="tablist">
-    <?php foreach ($config['times']['onderbouw'] as $key => $time): ?>
-    <?php $available = $config['maxGroupSize'] - subscriptionCount($time); ?>
+  <h2>Teams</h2>
+  <div id="accordion" role="tablist">
+    <?php foreach (getTeams() as $key => $team): ?>
+    <?php $available = $config['maxGroupSize'] - subscriptionCount($team); ?>
     <div class="card">
-      <div class="card-header" role="tab" id="heading-ob-<?= $key ?>">
+      <div class="card-header" role="tab" id="heading-<?= $key ?>">
         <h5 class="mb-0">
-          <a data-toggle="collapse" href="#collapse-ob-<?= $key ?>" aria-expanded="true" aria-controls="collapse-ob-<?= $key ?>">
-            <?= $time ?> uur
-            <?php if ($available > 2): ?>
-              <span class="badge badge-primary badge-success"><?= $available ?> plaatsen vrij</span>
-            <?php elseif ($available > 0): ?>
-              <span class="badge badge-primary badge-success"><?= $available ?> plaats<?= ($available > 1) ? "en" :
-                      "" ?> vrij</span>
-            <?php else: ?>
-              <span class="badge badge-primary badge-danger">vol</span>
-            <?php endif; ?>
+          <a data-toggle="collapse" href="#collapse-<?= $key ?>" aria-expanded="true" aria-controls="collapse-<?= $key ?>">
+            <?= $key+1 ?>. <?= $team->getTeamName() ?>
+            <small class="text-muted"><?= subscriptionCount($team) ?> deelnemer<?= (subscriptionCount($team) > 1) ? "s" : "" ?></small>
           </a>
         </h5>
       </div>
 
-      <div id="collapse-ob-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-ob-<?= $key ?>"
-           data-parent="#accordion-ob">
+      <div id="collapse-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-<?= $key ?>"
+           data-parent="#accordion">
         <div class="card-body">
-          <h3 class="hidden-print">Huidige inschrijvingen</h3>
+          <h3 class="hidden-print">Teamleden</h3>
           <?php if ($available == $config['maxGroupSize']): ?>
             <p><em>Nog geen inschrijvingen</em></p>
           <?php else: ?>
           <ol>
-            <?php foreach (getSubscriptions($time) as $subscription): ?>
+            <?php foreach ($team->getSubscriptions() as $subscription): ?>
               <?php foreach ($subscription->getNames() as $name): ?>
                 <li><?= $name; ?></li>
               <?php endforeach; ?>
@@ -81,23 +122,24 @@ include_once('controller.php');
     
           <?php if ($available > 0): ?>
           <p class="hidden-print">
-            <a class="btn btn-primary hidden-print" data-toggle="collapse" href="#subscribe-ob-<?= $key ?>"
+            <a class="btn btn-primary hidden-print" data-toggle="collapse" href="#subscribe-<?= $key ?>"
                aria-expanded="false"
-               aria-controls="subscribe-ob-<?= $key ?>">
+               aria-controls="subscribe-<?= $key ?>">
               Inschrijven
             </a>
           </p>
-          <div class="collapse hidden-print" id="subscribe-ob-<?= $key ?>">
+          <div class="collapse hidden-print" id="subscribe-<?= $key ?>">
             <div class="card card-body">
               <form class="hidden-print" method="post">
                 <h3>Inschrijfformulier</h3>
                 <input type="hidden" name="action" value="subscribe">
-                <input type="hidden" name="time" value="<?= $time ?>">
+                <input type="hidden" name="team" value="<?= $team->getId() ?>">
                 <input type="hidden" name="max-participants" value="<?= $available ?>">
+                <input type="hidden" name="teamname" value="">
                 <div class="form-group">
-                  <label for="name-ob-<?= $key ?>">Deelnemers</label>
+                  <label for="name-<?= $key ?>">Deelnemers</label>
                   <div class="participant-container">
-                    <input type="text" required class="form-control" autocomplete="off" name="name[]" id="name-ob-<?=
+                    <input type="text" required class="form-control" autocomplete="off" name="name[]" id="name-<?=
                     $key ?>"
                            placeholder="Naam deelnemer 1">
                   </div>
@@ -105,23 +147,28 @@ include_once('controller.php');
                     <?= $available ?>)</button>
                 </div>
                 <div class="form-group">
-                  <label for="speltak-ob-<?= $key ?>">Speltak</label>
-                  <select name="speltak" required class="form-control" id="speltak-ob-<?= $key ?>">
-                    <option selected disabled hidden value="">Kies een speltak</option>
-                    <option>Bevers</option>
-                    <option>Jacala welpen</option>
-                    <option>Rikki Tikki Tavi welpen</option>
-                  </select>
+                  <label for="teamname-<?= $key ?>">Teamnaam</label>
+                  <input type="text" name="tn" required readonly disabled class="form-control" id="teamname-<?= $key ?>"
+                         aria-describedby="teamnameHelp-<?= $key ?>" autocomplete="off"
+                         value="<?= $team->getTeamName() ?>">
+                  <small id="teamnameHelp-<?= $key ?>" class="form-text text-muted">Alleen de eerste inschrijver kan
+                    de teamnaam aanpassen met de link in de bevestigingsmail.</small>
                 </div>
                 <div class="form-group">
-                  <label for="email-ob-<?= $key ?>">E-mailadres inschrijver</label>
-                  <input type="email" name="email" required class="form-control" id="email-ob-<?= $key ?>"
-                         aria-describedby="emailHelp-ob-<?= $key ?>" autocomplete="off"
+                  <label for="email-<?= $key ?>">E-mailadres inschrijver</label>
+                  <input type="email" name="email" required class="form-control" id="email-<?= $key ?>"
+                         aria-describedby="emailHelp-<?= $key ?>" autocomplete="off"
                          placeholder="E-mailadres invullen">
-                  <small id="emailHelp-ob-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
+                  <small id="emailHelp-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
                     gemaakt.</small>
                 </div>
-                <button type="submit" class="btn btn-primary">Inschrijven voor <?= $time ?></button>
+                <button type="submit" class="btn btn-primary">
+                  <?php if ($available == $config['maxGroupSize']): ?>
+                    Team inschrijven
+                  <?php else: ?>
+                    Teamleden toevoegen
+                  <?php endif; ?>
+                </button>
               </form>
             </div>
           </div>
@@ -136,103 +183,61 @@ include_once('controller.php');
       </div>
     </div>
     <?php endforeach; ?>
-  </div>
+    <div class="card hidden-print">
+      <?php $key = "new" ?>
+      <div class="card-header" role="tab" id="heading-<?= $key ?>">
+        <h5 class="mb-0">
+          <a data-toggle="collapse" href="#collapse-<?= $key ?>" aria-expanded="true" aria-controls="collapse-<?= $key ?>">
+            <span style="color: black; font-weight: bold;">+&nbsp;Nieuw team</span>
+          </a>
+        </h5>
+      </div>
 
-  <hr style="margin: 30px;"/>
-  
-  <h2>Bovenbouw spooktocht</h2>
-  <div id="accordion-bb" role="tablist">
-      <?php foreach ($config['times']['bovenbouw'] as $key => $time): ?>
-          <?php $available = $config['maxGroupSize'] - subscriptionCount($time); ?>
-        <div class="card">
-          <div class="card-header" role="tab" id="heading-bb-<?= $key ?>">
-            <h5 class="mb-0">
-              <a data-toggle="collapse" href="#collapse-bb-<?= $key ?>" aria-expanded="true" aria-controls="collapse-bb-<?= $key ?>">
-                  <?= $time ?> uur
-                  <?php if ($available > 2): ?>
-                    <span class="badge badge-primary badge-success"><?= $available ?> plaatsen vrij</span>
-                  <?php elseif ($available > 0): ?>
-                    <span class="badge badge-primary badge-success"><?= $available ?> plaats<?= ($available > 1) ? "en" :
-                            "" ?> vrij</span>
-                  <?php else: ?>
-                    <span class="badge badge-primary badge-danger">vol</span>
-                  <?php endif; ?>
-              </a>
-            </h5>
-          </div>
-
-          <div id="collapse-bb-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-bb-<?= $key ?>"
-               data-parent="#accordion-bb">
-            <div class="card-body">
-              <h3 class="hidden-print">Huidige inschrijvingen</h3>
-                <?php if ($available == $config['maxGroupSize']): ?>
-                  <p><em>Nog geen inschrijvingen</em></p>
-                <?php else: ?>
-                  <ol>
-                      <?php foreach (getSubscriptions($time) as $subscription): ?>
-                          <?php foreach ($subscription->getNames() as $name): ?>
-                          <li><?= $name; ?></li>
-                          <?php endforeach; ?>
-                      <?php endforeach; ?>
-                  </ol>
-                <?php endif; ?>
-                
-                <?php if ($available > 0): ?>
-                  <p class="hidden-print">
-                    <a class="btn btn-primary hidden-print" data-toggle="collapse" href="#subscribe-bb-<?= $key ?>"
-                       aria-expanded="false"
-                       aria-controls="subscribe-bb-<?= $key ?>">
-                      Inschrijven
-                    </a>
-                  </p>
-                  <div class="collapse hidden-print" id="subscribe-bb-<?= $key ?>">
-                    <div class="card card-body">
-                      <form class="hidden-print" method="post">
-                        <h3>Inschrijfformulier</h3>
-                        <input type="hidden" name="action" value="subscribe">
-                        <input type="hidden" name="time" value="<?= $time ?>">
-                        <input type="hidden" name="max-participants" value="<?= $available ?>">
-                        <div class="form-group">
-                          <label for="name-bb-<?= $key ?>">Deelnemers</label>
-                          <div class="participant-container">
-                            <input type="text" required class="form-control" name="name[]" id="name-bb-<?= $key ?>"
-                                   placeholder="Naam deelnemer 1" autocomplete="off">
-                          </div>
-                          <button type="button" class="btn form-control btn-secondary add-participant">Deelnemer toevoegen (max
-                              <?= $available ?>)</button>
-                        </div>
-                        <div class="form-group">
-                          <label for="speltak-bb-<?= $key ?>">Speltak</label>
-                          <select name="speltak" required class="form-control" id="speltak-bb-<?= $key ?>">
-                            <option selected disabled hidden value="">Kies een speltak</option>
-                            <option>Gidsen</option>
-                            <option>Verkenners</option>
-                            <option>RSA</option>
-                            <option>Vrijwilliger</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="email-bb-<?= $key ?>">E-mailadres inschrijver</label>
-                          <input type="email" name="email" required class="form-control" id="email-bb-<?= $key ?>"
-                                 aria-describedby="emailHelp-bb-<?= $key ?>"
-                                 placeholder="E-mailadres invullen" autocomplete="off">
-                          <small id="emailHelp-bb-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
-                            gemaakt.</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Inschrijven voor <?= $time ?></button>
-                      </form>
+      <div id="collapse-<?= $key ?>" class="collapse" role="tabpanel" aria-labelledby="heading-<?= $key ?>"
+           data-parent="#accordion">
+        <div class="card-body">
+          <div class="hidden-print" id="subscribe-<?= $key ?>">
+                <div class="card card-body">
+                  <form class="hidden-print" method="post">
+                    <h3>Inschrijfformulier</h3>
+                    <input type="hidden" name="action" value="subscribe">
+                    <input type="hidden" name="team" value="new">
+                    <input type="hidden" name="max-participants" value="<?= $config['maxGroupSize'] ?>">
+                    <div class="form-group">
+                      <label for="name-<?= $key ?>">Deelnemers</label>
+                      <div class="participant-container">
+                        <input type="text" required class="form-control" autocomplete="off" name="name[]" id="name-<?=
+                        $key ?>"
+                               placeholder="Naam deelnemer 1">
+                      </div>
+                      <button type="button" class="btn form-control btn-secondary add-participant">Deelnemer toevoegen (max
+                          <?= $config['maxGroupSize'] ?>)</button>
                     </div>
-                  </div>
-                <?php else: ?>
-                  <p>
-                    <button type="button" disabled class="btn btn-danger hidden-print">Inschrijving is vol</button>
-                  </p>
-                <?php endif; ?>
-
+                    <div class="form-group">
+                      <label for="teamname-<?= $key ?>">Teamnaam</label>
+                      <input type="text" name="teamname" required class="form-control" id="teamname-<?= $key ?>"
+                             aria-describedby="teamnameHelp-<?= $key ?>" autocomplete="off"
+                             placeholder="Teamnaam invullen">
+                      <small id="teamnameHelp-<?= $key ?>" class="form-text text-muted">De teamnaam kan later nog
+                        worden aangepast.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="email-<?= $key ?>">E-mailadres inschrijver</label>
+                      <input type="email" name="email" required class="form-control" id="email-<?= $key ?>"
+                             aria-describedby="emailHelp-<?= $key ?>" autocomplete="off"
+                             placeholder="E-mailadres invullen">
+                      <small id="emailHelp-<?= $key ?>" class="form-text text-muted">E-mailadres wordt niet openbaar
+                        gemaakt.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Team inschrijven
+                    </button>
+                  </form>
+                </div>
             </div>
-          </div>
         </div>
-      <?php endforeach; ?>
+      </div>
+    </div>
   </div>
 
 </div>

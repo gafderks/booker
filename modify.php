@@ -21,12 +21,12 @@ if (count($subscription) == 0) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     
-    <title>Pivo's Spooktochten</title>
+    <title>Pivo's PubQuiz</title>
 </head>
 <body>
 <div class="container">
     
-    <h1>Pivo's spooktochten</h1>
+    <h1>Pivo's PubQuiz 2017</h1>
     
     <?php if (isset($notice)): ?>
         <div class="alert alert-<?= $notice['type'] ?>" role="alert">
@@ -44,13 +44,27 @@ if (count($subscription) == 0) {
             <form class="hidden-print" method="post">
                 <?php $key = 1; ?>
                 <input type="hidden" name="action" value="modify">
+                <input type="hidden" name="teamId" value="<?= $subscription->getTeam()->getId() ?>">
                 <input type="hidden" name="pass" value="<?= $_GET['pass'] ?>">
+                <?php if ($subscription->getId() == $subscription->getTeam()->getSubscriptions()->first()->getId()): ?>
                 <div class="form-group">
-                    <label>Tijdslot</label>
-                    <input type="text" readonly class="form-control" value="<?= $subscription->getTime(); ?>">
-                    <small class="form-text text-muted">Om de tijd aan te passen schrijf je je eerst uit en meld je je
-                        daarna weer aan.</small>
+                    <label for="teamname">Teamnaam</label>
+                    <input type="text" id="teamname" name="teamname" class="form-control" value="<?=
+                    $subscription->getTeam()->getTeamName();
+                    ?>">
+                    <small class="form-text text-muted">Alleen jij kunt de teamnaam aanpassen.</small>
                 </div>
+                <?php else: ?>
+                <div class="form-group">
+                  <label for="teamname">Teamnaam</label>
+                  <input type="text" id="teamname" disabled class="form-control" value="<?= $subscription->getTeam()
+                      ->getTeamName();
+                  ?>">
+                  <input type="hidden" name="teamname" value="">
+                  <small class="form-text text-muted">Alleen de eerste inschrijver kan
+                    de teamnaam aanpassen met de link in de bevestigingsmail.</small>
+                </div>
+                <?php endif; ?>
                 <div class="form-group">
                     <label for="name-ob-<?= $key ?>">Deelnemers</label>
                     <div class="participant-container">
@@ -60,26 +74,8 @@ if (count($subscription) == 0) {
                         <?php endforeach; ?>
                     </div>
                     <small class="form-text text-muted">Maak een veld leeg om een losse deelnemer uit te schrijven.
-                        Je kunt geen extra deelnemers toevoegen.
+                        Je kunt geen extra deelnemers toevoegen. Start daarvoor een nieuwe inschrijving.
                     </small>
-                </div>
-                <div class="form-group">
-                    <?php $s = $subscription->getSpeltak(); ?>
-                    <label for="speltak-ob-<?= $key ?>">Speltak</label>
-                    <select name="speltak" required class="form-control" id="speltak-ob-<?= $key ?>">
-                        <option selected disabled hidden value="">Kies een speltak</option>
-                        <optgroup label="Onderbouw">
-                            <option <?= ($s != 'Bevers') ?: 'selected' ?>>Bevers</option>
-                            <option <?= ($s != 'Jacala welpen') ?: 'selected' ?>>Jacala welpen</option>
-                            <option <?= ($s != 'Rikki Tikki Tavi welpen') ?: 'selected' ?>>Rikki Tikki Tavi welpen</option>
-                        </optgroup>
-                        <optgroup label="Bovenbouw">
-                            <option <?= ($s != 'Gidsen') ?: 'selected' ?>>Gidsen</option>
-                            <option <?= ($s != 'Verkenners') ?: 'selected' ?>>Verkenners</option>
-                            <option <?= ($s != 'RSA') ?: 'selected' ?>>RSA</option>
-                            <option <?= ($s != 'Vrijwilliger') ?: 'selected' ?>>Vrijwilliger</option>
-                        </optgroup>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="email-ob-<?= $key ?>">E-mailadres inschrijver</label>
@@ -105,6 +101,8 @@ if (count($subscription) == 0) {
                 <input type="hidden" name="action" value="unsubscribe">
                 <input type="hidden" name="pass" value="<?= $_GET['pass'] ?>">
                 <button type="submit" class="btn btn-danger">Alle deelnemers uitschrijven</button>
+                <small class="form-text text-muted">Het team wordt <?= (count($subscription->getTeam()
+                        ->getSubscriptions()) > 1) ? "<em>niet</em> " : "<em>ook</em> " ?>opgeheven.</small>
             </form>
         </div>
     </div>

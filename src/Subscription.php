@@ -22,16 +22,11 @@ class Subscription
     protected $email;
     
     /**
-     * @var string
-     * @Column(type="string")
+     * @ManyToOne(targetEntity="Team", inversedBy="subscriptions")
+     * @JoinColumn(name="team_id", referencedColumnName="id")
+     * @var \Team
      */
-    protected $speltak;
-    
-    /**
-     * @var string
-     * @Column(type="string")
-     */
-    protected $time;
+    private $team;
     
     /**
      * @var array
@@ -57,14 +52,6 @@ class Subscription
         return $this->names;
     }
     
-    public function getSpeltak() {
-        return $this->speltak;
-    }
-    
-    public function getTime() {
-        return $this->time;
-    }
-    
     public function getTimestamp() {
         return $this->timestamp;
     }
@@ -77,18 +64,20 @@ class Subscription
         return $this->pass;
     }
     
-    public function __construct($time, $names, $speltak, $email) {
-        $this->time = $time;
+    public function getTeam() {
+        return $this->team;
+    }
+    
+    public function __construct($team, $names, $email) {
         $this->names = array_values(array_filter($names));
-        $this->speltak = $speltak;
         $this->email = $email;
         $this->timestamp = new \DateTime('now');
         $this->pass = sha1(uniqid());
+        $this->team = $team;
     }
     
-    public function update($names, $speltak) {
+    public function update($names) {
         $this->names = array_values(array_filter($names));
-        $this->speltak = $speltak;
     }
     
 }
