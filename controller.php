@@ -44,7 +44,7 @@ function subscribe($teamId, array $names, $teamname, $email) {
                 . "\nDeelnemers: " . join(', ', $names)
                 . "\nTeamnaam: ".$subscription->getTeam()->getTeamName()
                 . "\n\nOm je inschrijving aan te passen of je uit te schrijven ga je naar:"
-                . "\nhttps://" . $_SERVER['HTTP_HOST'] . "/modify.php?pass=" . $subscription->getPass()
+                . "\nhttp://" . $_SERVER['HTTP_HOST'] . "/modify.php?pass=" . $subscription->getPass()
                 . "\n\n\nAls je vragen hebt over je inschrijving kun je mailen naar pivos@descouting.nl";
     
             try {
